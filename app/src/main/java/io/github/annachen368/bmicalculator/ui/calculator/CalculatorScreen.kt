@@ -20,8 +20,7 @@ import io.github.annachen368.bmicalculator.ui.theme.BMICalculatorTheme
 
 data class CalculatorUiState(
     val date: String,
-    val cmKgRadioButtonSelected: Boolean,
-    val ftLbsRadioButtonSelected: Boolean,
+    val isCmKgRadioButtonSelected: Boolean,
     val cmKgRadioButtonText: String,
     val ftLbsRadioButtonText: String,
     val cmValue: String,
@@ -31,6 +30,10 @@ data class CalculatorUiState(
     val lbsValue: String
 )
 
+/**
+ * onEvent: (CalculatorEvent) -> Unit is a single handler for all UI actions,
+ * letting the ViewModel decide what to do when each event happens.
+ */
 sealed class CalculatorEvent {
     object OnCmKgRadioButtonSelected : CalculatorEvent()
     object OnFtLbsRadioButtonSelected : CalculatorEvent()
@@ -55,20 +58,20 @@ fun CalculatorScreen(
         Spacer(Modifier.padding(12.dp))
         Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
             Row {
-                HeightRadioBoxLayout(
-                    uiState.cmKgRadioButtonSelected,
-                    { onEvent(CalculatorEvent.OnCmKgRadioButtonSelected) },
-                    uiState.cmKgRadioButtonText
+                UnitSelectionRow(
+                    selected = uiState.isCmKgRadioButtonSelected,
+                    text = uiState.cmKgRadioButtonText,
+                    onSelected = { onEvent(CalculatorEvent.OnCmKgRadioButtonSelected) }
                 )
-                HeightRadioBoxLayout(
-                    uiState.ftLbsRadioButtonSelected,
-                    { onEvent(CalculatorEvent.OnFtLbsRadioButtonSelected) },
-                    uiState.ftLbsRadioButtonText
+                UnitSelectionRow(
+                    selected = !uiState.isCmKgRadioButtonSelected,
+                    text = uiState.ftLbsRadioButtonText,
+                    onSelected = { onEvent(CalculatorEvent.OnFtLbsRadioButtonSelected) }
                 )
             }
         }
         Spacer(Modifier.padding(12.dp))
-        if (uiState.cmKgRadioButtonSelected) {
+        if (uiState.isCmKgRadioButtonSelected) {
             HeightCmKgLayout(
                 uiState.cmValue,
                 uiState.kgValue,
@@ -97,14 +100,14 @@ fun CalculatorScreen(
 }
 
 @Composable
-fun HeightRadioBoxLayout(
+fun UnitSelectionRow(
     selected: Boolean,
-    onRadioButtonSelected: () -> Unit,
-    radioButtonText: String
+    text: String,
+    onSelected: () -> Unit
 ) {
-    Row {
-        RadioButton(selected = selected, onClick = onRadioButtonSelected)
-        Text(text = radioButtonText)
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        RadioButton(selected = selected, onClick = onSelected)
+        Text(text = text)
     }
 }
 
@@ -184,8 +187,7 @@ private fun CalculatorScreenPreview() {
             innerPadding = PaddingValues(0.dp),
             uiState = CalculatorUiState(
                 date = "May 1, 2025",
-                cmKgRadioButtonSelected = false,
-                ftLbsRadioButtonSelected = true,
+                isCmKgRadioButtonSelected = false,
                 cmKgRadioButtonText = "cm/kg",
                 ftLbsRadioButtonText = "ft/lbs",
                 cmValue = "",
