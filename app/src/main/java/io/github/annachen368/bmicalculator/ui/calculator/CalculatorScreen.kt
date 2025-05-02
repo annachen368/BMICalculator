@@ -18,65 +18,77 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.annachen368.bmicalculator.ui.theme.BMICalculatorTheme
 
+data class CalculatorUiState(
+    val date: String,
+    val cmKgRadioButtonSelected: Boolean,
+    val ftLbsRadioButtonSelected: Boolean,
+    val cmKgRadioButtonText: String,
+    val ftLbsRadioButtonText: String,
+    val cmValue: String,
+    val kgValue: String,
+    val ftValue: String,
+    val inValue: String,
+    val lbsValue: String
+)
+
+sealed class CalculatorEvent {
+    object OnCmKgRadioButtonSelected : CalculatorEvent()
+    object OnFtLbsRadioButtonSelected : CalculatorEvent()
+    data class OnCmValueChange(val value: String) : CalculatorEvent()
+    data class OnKgValueChange(val value: String) : CalculatorEvent()
+    data class OnFtValueChange(val value: String) : CalculatorEvent()
+    data class OnInValueChange(val value: String) : CalculatorEvent()
+    data class OnLbsValueChange(val value: String) : CalculatorEvent()
+    object OnEnterClick : CalculatorEvent()
+}
+
 @Composable
 fun CalculatorScreen(
     innerPadding: PaddingValues,
-    date: String,
-    cmKgRadioButtonSelected: Boolean,
-    onCmKgRadioButtonSelected: () -> Unit,
-    cmKgRadioButtonText: String,
-    ftLbsRadioButtonSelected: Boolean,
-    onFtLbsRadioButtonSelected: () -> Unit,
-    ftLbsRadioButtonText: String,
-    cmValue: String,
-    kgValue: String,
-    onCmValueChange: (String) -> Unit,
-    onKgValueChange: (String) -> Unit,
-    ftValue: String,
-    inValue: String,
-    lbsValue: String,
-    onFtValueChange: (String) -> Unit,
-    onInValueChange: (String) -> Unit,
-    onLbsValueChange: (String) -> Unit,
-    onEnterClick: () -> Unit
+    uiState: CalculatorUiState,
+    onEvent: (CalculatorEvent) -> Unit
 ) {
     Column(Modifier.padding(innerPadding)) {
         Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
-            Text(text = "Today is $date")
+            Text(text = "Today is ${uiState.date}")
         }
         Spacer(Modifier.padding(12.dp))
         Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
             Row {
                 HeightRadioBoxLayout(
-                    cmKgRadioButtonSelected,
-                    onCmKgRadioButtonSelected,
-                    cmKgRadioButtonText
+                    uiState.cmKgRadioButtonSelected,
+                    { onEvent(CalculatorEvent.OnCmKgRadioButtonSelected) },
+                    uiState.cmKgRadioButtonText
                 )
                 HeightRadioBoxLayout(
-                    ftLbsRadioButtonSelected,
-                    onFtLbsRadioButtonSelected,
-                    ftLbsRadioButtonText
+                    uiState.ftLbsRadioButtonSelected,
+                    { onEvent(CalculatorEvent.OnFtLbsRadioButtonSelected) },
+                    uiState.ftLbsRadioButtonText
                 )
             }
         }
         Spacer(Modifier.padding(12.dp))
-        if (cmKgRadioButtonSelected) {
-            HeightCmKgLayout(cmValue, kgValue, onCmValueChange, onKgValueChange)
+        if (uiState.cmKgRadioButtonSelected) {
+            HeightCmKgLayout(
+                uiState.cmValue,
+                uiState.kgValue,
+                { onEvent(CalculatorEvent.OnCmValueChange(it)) },
+                { onEvent(CalculatorEvent.OnKgValueChange(it)) })
         } else {
             HeightFtInLayout(
-                ftValue,
-                inValue,
-                lbsValue,
-                onFtValueChange,
-                onInValueChange,
-                onLbsValueChange
+                uiState.ftValue,
+                uiState.inValue,
+                uiState.lbsValue,
+                { onEvent(CalculatorEvent.OnFtValueChange(it)) },
+                { onEvent(CalculatorEvent.OnInValueChange(it)) },
+                { onEvent(CalculatorEvent.OnLbsValueChange(it)) }
             )
         }
         Spacer(Modifier.padding(12.dp))
         HorizontalDivider()
         Spacer(Modifier.padding(4.dp))
         Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
-            Button(onEnterClick) {
+            Button({ onEvent(CalculatorEvent.OnEnterClick) }) {
                 Text(text = "Enter")
             }
         }
@@ -170,24 +182,19 @@ private fun CalculatorScreenPreview() {
     BMICalculatorTheme {
         CalculatorScreen(
             innerPadding = PaddingValues(0.dp),
-            date = "May 1, 2025",
-            cmKgRadioButtonSelected = false,
-            onCmKgRadioButtonSelected = {},
-            cmKgRadioButtonText = "cm/kg",
-            ftLbsRadioButtonSelected = true,
-            onFtLbsRadioButtonSelected = {},
-            ftLbsRadioButtonText = "ft/lbs",
-            "",
-            "",
-            onCmValueChange = {},
-            onKgValueChange = {},
-            "",
-            "",
-            "",
-            onFtValueChange = {},
-            onInValueChange = {},
-            onLbsValueChange = {},
-            onEnterClick = {}
+            uiState = CalculatorUiState(
+                date = "May 1, 2025",
+                cmKgRadioButtonSelected = false,
+                ftLbsRadioButtonSelected = true,
+                cmKgRadioButtonText = "cm/kg",
+                ftLbsRadioButtonText = "ft/lbs",
+                cmValue = "",
+                kgValue = "",
+                ftValue = "",
+                inValue = "",
+                lbsValue = ""
+            ),
+            onEvent = { }
         )
     }
 }

@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.annachen368.bmicalculator.ui.calculator.CalculatorScreen
+import io.github.annachen368.bmicalculator.ui.calculator.CalculatorUiState
 import io.github.annachen368.bmicalculator.ui.theme.BMICalculatorTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,24 +25,19 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     CalculatorScreen(
                         innerPadding,
-                        date = "May 1, 2025",
-                        cmKgRadioButtonSelected = false,
-                        onCmKgRadioButtonSelected = {},
-                        cmKgRadioButtonText = "cm/kg",
-                        ftLbsRadioButtonSelected = true,
-                        onFtLbsRadioButtonSelected = {},
-                        ftLbsRadioButtonText = "ft/lbs",
-                        "",
-                        "",
-                        onCmValueChange = {},
-                        onKgValueChange = {},
-                        "",
-                        "",
-                        "",
-                        onFtValueChange = {},
-                        onInValueChange = {},
-                        onLbsValueChange = {},
-                        onEnterClick = {}
+                        uiState = CalculatorUiState(
+                            date = "May 1, 2025",
+                            cmKgRadioButtonSelected = false,
+                            ftLbsRadioButtonSelected = true,
+                            cmKgRadioButtonText = "cm/kg",
+                            ftLbsRadioButtonText = "ft/lbs",
+                            cmValue = "",
+                            kgValue = "",
+                            ftValue = "",
+                            inValue = "",
+                            lbsValue = ""
+                        ),
+                        onEvent = { }
                     )
                 }
             }
