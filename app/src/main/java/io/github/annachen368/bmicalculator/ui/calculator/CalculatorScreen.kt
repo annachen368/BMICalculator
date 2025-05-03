@@ -73,7 +73,7 @@ fun CalculatorScreen(
         val optionSelected =
             listOf(uiState.isCmKgRadioButtonSelected, !uiState.isCmKgRadioButtonSelected)
         val optionEvents = listOf(
-            { onEvent(CalculatorEvent.OnCmKgRadioButtonSelected) },
+            { onEvent(CalculatorEvent.OnCmKgRadioButtonSelected) }, // Wrap in lambdas {} defers the call
             { onEvent(CalculatorEvent.OnFtLbsRadioButtonSelected) }
         )
         val optionTexts = listOf(uiState.cmKgRadioButtonText, uiState.ftLbsRadioButtonText)
