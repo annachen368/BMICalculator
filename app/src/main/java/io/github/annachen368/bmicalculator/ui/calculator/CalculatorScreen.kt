@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
@@ -58,21 +59,38 @@ fun CalculatorScreen(
         Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
             Text(text = "Today is ${uiState.date}")
         }
+
         Spacer(Modifier.padding(12.dp))
-        Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
-            Row {
-                UnitSelectionRow(
-                    selected = uiState.isCmKgRadioButtonSelected,
-                    text = uiState.cmKgRadioButtonText,
-                    onSelected = { onEvent(CalculatorEvent.OnCmKgRadioButtonSelected) }
-                )
-                UnitSelectionRow(
-                    selected = !uiState.isCmKgRadioButtonSelected,
-                    text = uiState.ftLbsRadioButtonText,
-                    onSelected = { onEvent(CalculatorEvent.OnFtLbsRadioButtonSelected) }
-                )
+
+        val optionSelected =
+            listOf(uiState.isCmKgRadioButtonSelected, !uiState.isCmKgRadioButtonSelected)
+        val optionEvents = listOf(
+            onEvent(CalculatorEvent.OnCmKgRadioButtonSelected),
+            onEvent(CalculatorEvent.OnFtLbsRadioButtonSelected)
+        )
+        val optionTexts = listOf(uiState.cmKgRadioButtonText, uiState.ftLbsRadioButtonText)
+
+        // Modifier.selectableGroup(): Helps TalkBack understand that the radio buttons are grouped
+        Row(Modifier.selectableGroup()) {
+            for (i in optionTexts.indices) {
+                Row(
+                    modifier = Modifier
+                        .selectable(
+                            selected = optionSelected[i],
+                            onClick = { optionEvents[i] })
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = optionSelected[i],
+                        onClick = null // null because we handle click at Row level
+                    )
+                    Spacer(modifier = Modifier.padding(2.dp))
+                    Text(text = optionTexts[i])
+                }
             }
         }
+
         Spacer(Modifier.padding(12.dp))
         if (uiState.isCmKgRadioButtonSelected) {
             LabeledTextFieldRow("Height") {
@@ -108,7 +126,7 @@ fun CalculatorScreen(
                 Spacer(Modifier.padding(4.dp))
                 TextField(
                     value = uiState.inValue,
-                    onValueChange = { onEvent(CalculatorEvent.OnLbsValueChange(it)) },
+                    onValueChange = { onEvent(CalculatorEvent.OnInValueChange(it)) },
                     label = {
                         Text(text = "in")
                     },
@@ -135,18 +153,6 @@ fun CalculatorScreen(
             }
         }
         Spacer(Modifier.padding(4.dp))
-    }
-}
-
-@Composable
-fun UnitSelectionRow(
-    selected: Boolean,
-    text: String,
-    onSelected: () -> Unit
-) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        RadioButton(selected = selected, onClick = onSelected)
-        Text(text = text)
     }
 }
 
