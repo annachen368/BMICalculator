@@ -5,7 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.RadioButton
@@ -72,20 +75,56 @@ fun CalculatorScreen(
         }
         Spacer(Modifier.padding(12.dp))
         if (uiState.isCmKgRadioButtonSelected) {
-            HeightCmKgLayout(
-                uiState.cmValue,
-                uiState.kgValue,
-                { onEvent(CalculatorEvent.OnCmValueChange(it)) },
-                { onEvent(CalculatorEvent.OnKgValueChange(it)) })
+            LabeledTextFieldRow("Height") {
+                TextField(
+                    value = uiState.cmValue,
+                    onValueChange = { onEvent(CalculatorEvent.OnCmValueChange(it)) },
+                    label = {
+                        Text(text = "cm")
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            LabeledTextFieldRow("Weight") {
+                TextField(
+                    value = uiState.kgValue,
+                    onValueChange = { onEvent(CalculatorEvent.OnKgValueChange(it)) },
+                    label = {
+                        Text(text = "kg")
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         } else {
-            HeightFtInLayout(
-                uiState.ftValue,
-                uiState.inValue,
-                uiState.lbsValue,
-                { onEvent(CalculatorEvent.OnFtValueChange(it)) },
-                { onEvent(CalculatorEvent.OnInValueChange(it)) },
-                { onEvent(CalculatorEvent.OnLbsValueChange(it)) }
-            )
+            LabeledTextFieldRow("Height") {
+                TextField(
+                    value = uiState.ftValue,
+                    onValueChange = { onEvent(CalculatorEvent.OnFtValueChange(it)) },
+                    label = {
+                        Text(text = "ft")
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+                Spacer(Modifier.padding(4.dp))
+                TextField(
+                    value = uiState.inValue,
+                    onValueChange = { onEvent(CalculatorEvent.OnLbsValueChange(it)) },
+                    label = {
+                        Text(text = "in")
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            LabeledTextFieldRow("Weight") {
+                TextField(
+                    value = uiState.lbsValue,
+                    onValueChange = { onEvent(CalculatorEvent.OnLbsValueChange(it)) },
+                    label = {
+                        Text(text = "lbs")
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
         Spacer(Modifier.padding(12.dp))
         HorizontalDivider()
@@ -112,70 +151,19 @@ fun UnitSelectionRow(
 }
 
 @Composable
-private fun HeightCmKgLayout(
-    cmValue: String,
-    kgValue: String,
-    onCmValueChange: (String) -> Unit,
-    onKgValueChange: (String) -> Unit
+fun LabeledTextFieldRow(
+    label: String,
+    content: @Composable () -> Unit
 ) {
-    Row {
-        Text(text = "Height")
-        TextField(
-            value = cmValue,
-            onValueChange = onCmValueChange,
-            label = {
-                Text(text = "cm")
-            }
-        )
-    }
-    Row {
-        Text(text = "Weight")
-        TextField(
-            value = kgValue,
-            onValueChange = onKgValueChange,
-            label = {
-                Text(text = "kg")
-            }
-        )
-    }
-}
-
-@Composable
-private fun HeightFtInLayout(
-    ftValue: String,
-    inValue: String,
-    lbsValue: String,
-    onFtValueChange: (String) -> Unit,
-    onInValueChange: (String) -> Unit,
-    onLbsValueChange: (String) -> Unit
-) {
-    Row {
-        Text(text = "Height")
-        TextField(
-            value = ftValue,
-            onValueChange = onFtValueChange,
-            label = {
-                Text(text = "ft")
-            }
-        )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth()
+    ) {
+        Text(text = label, modifier = Modifier.width(54.dp))
         Spacer(Modifier.padding(4.dp))
-        TextField(
-            value = inValue,
-            onValueChange = onInValueChange,
-            label = {
-                Text(text = "in")
-            }
-        )
-    }
-    Row {
-        Text(text = "Weight")
-        TextField(
-            value = lbsValue,
-            onValueChange = onLbsValueChange,
-            label = {
-                Text(text = "lbs")
-            }
-        )
+        content()
     }
 }
 
