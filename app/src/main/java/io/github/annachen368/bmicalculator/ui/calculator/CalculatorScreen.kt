@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -60,7 +62,9 @@ fun CalculatorScreen(
     uiState: CalculatorUiState,
     onEvent: (CalculatorEvent) -> Unit
 ) {
-    Column(Modifier.padding(innerPadding)) {
+    Column(Modifier
+        .padding(innerPadding)
+        .fillMaxSize()) {
         Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
             Text(
                 text = "Today is ${uiState.date}",
@@ -177,7 +181,8 @@ fun CalculatorScreen(
                 }
             }
         }
-        Spacer(Modifier.height(24.dp))
+        // Push everything below this down
+        Spacer(modifier = Modifier.weight(1f))
         HorizontalDivider()
         Box(
             modifier = Modifier
