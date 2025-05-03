@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardOptions
@@ -103,59 +104,77 @@ fun CalculatorScreen(
         Spacer(Modifier.height(24.dp))
         if (uiState.isCmKgRadioButtonSelected) {
             LabeledTextFieldRow("Height") {
-                TextField(
-                    value = uiState.cmValue,
-                    onValueChange = { onEvent(CalculatorEvent.OnCmValueChange(it)) },
-                    label = {
-                        Text(text = "cm")
-                    },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth()
-                )
+                Row {
+                    TextField(
+                        value = uiState.cmValue,
+                        onValueChange = { onEvent(CalculatorEvent.OnCmValueChange(it)) },
+                        label = {
+                            Text(text = "cm")
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
+
             LabeledTextFieldRow("Weight") {
-                TextField(
-                    value = uiState.kgValue,
-                    onValueChange = { onEvent(CalculatorEvent.OnKgValueChange(it)) },
-                    label = {
-                        Text(text = "kg")
-                    },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth()
-                )
+                Row {
+                    TextField(
+                        value = uiState.kgValue,
+                        onValueChange = { onEvent(CalculatorEvent.OnKgValueChange(it)) },
+                        label = {
+                            Text(text = "kg")
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         } else {
             LabeledTextFieldRow("Height") {
-                TextField(
-                    value = uiState.ftValue,
-                    onValueChange = { onEvent(CalculatorEvent.OnFtValueChange(it)) },
-                    label = {
-                        Text(text = "ft")
-                    },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.weight(0.4f)
-                )
-                Spacer(Modifier.padding(4.dp))
-                TextField(
-                    value = uiState.inValue,
-                    onValueChange = { onEvent(CalculatorEvent.OnInValueChange(it)) },
-                    label = {
-                        Text(text = "in")
-                    },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.weight(0.4f)
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    TextField(
+                        value = uiState.ftValue,
+                        onValueChange = { onEvent(CalculatorEvent.OnFtValueChange(it)) },
+                        label = {
+                            Text(text = "ft")
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                    )
+                    TextField(
+                        value = uiState.inValue,
+                        onValueChange = { onEvent(CalculatorEvent.OnInValueChange(it)) },
+                        label = {
+                            Text(text = "in")
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                    )
+                }
             }
+
             LabeledTextFieldRow("Weight") {
-                TextField(
-                    value = uiState.lbsValue,
-                    onValueChange = { onEvent(CalculatorEvent.OnLbsValueChange(it)) },
-                    label = {
-                        Text(text = "lbs")
-                    },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.weight(0.8f)
-                )
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    TextField(
+                        value = uiState.lbsValue,
+                        onValueChange = { onEvent(CalculatorEvent.OnLbsValueChange(it)) },
+                        label = {
+                            Text(text = "lbs")
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                    )
+                }
             }
         }
         Spacer(Modifier.height(24.dp))
@@ -184,7 +203,7 @@ fun LabeledTextFieldRow(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        Text(text = label, modifier = Modifier.weight(0.2f))
+        Text(text = label, modifier = Modifier.width(64.dp)) // ensures alignment across rows
         content()
     }
 }
