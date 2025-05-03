@@ -1,23 +1,27 @@
 package io.github.annachen368.bmicalculator.ui.calculator
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.annachen368.bmicalculator.ui.theme.BMICalculatorTheme
@@ -57,16 +61,20 @@ fun CalculatorScreen(
 ) {
     Column(Modifier.padding(innerPadding)) {
         Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
-            Text(text = "Today is ${uiState.date}")
+            Text(
+                text = "Today is ${uiState.date}",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(top = 12.dp)
+            )
         }
 
-        Spacer(Modifier.padding(12.dp))
+        Spacer(Modifier.height(24.dp))
 
         val optionSelected =
             listOf(uiState.isCmKgRadioButtonSelected, !uiState.isCmKgRadioButtonSelected)
         val optionEvents = listOf(
-            onEvent(CalculatorEvent.OnCmKgRadioButtonSelected),
-            onEvent(CalculatorEvent.OnFtLbsRadioButtonSelected)
+            { onEvent(CalculatorEvent.OnCmKgRadioButtonSelected) },
+            { onEvent(CalculatorEvent.OnFtLbsRadioButtonSelected) }
         )
         val optionTexts = listOf(uiState.cmKgRadioButtonText, uiState.ftLbsRadioButtonText)
 
@@ -77,21 +85,22 @@ fun CalculatorScreen(
                     modifier = Modifier
                         .selectable(
                             selected = optionSelected[i],
-                            onClick = { optionEvents[i] })
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                            onClick = optionEvents[i]
+                        )
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     RadioButton(
                         selected = optionSelected[i],
                         onClick = null // null because we handle click at Row level
                     )
-                    Spacer(modifier = Modifier.padding(2.dp))
                     Text(text = optionTexts[i])
                 }
             }
         }
 
-        Spacer(Modifier.padding(12.dp))
+        Spacer(Modifier.height(24.dp))
         if (uiState.isCmKgRadioButtonSelected) {
             LabeledTextFieldRow("Height") {
                 TextField(
@@ -100,6 +109,7 @@ fun CalculatorScreen(
                     label = {
                         Text(text = "cm")
                     },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -110,6 +120,7 @@ fun CalculatorScreen(
                     label = {
                         Text(text = "kg")
                     },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -121,7 +132,8 @@ fun CalculatorScreen(
                     label = {
                         Text(text = "ft")
                     },
-                    modifier = Modifier.weight(1f)
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.weight(0.4f)
                 )
                 Spacer(Modifier.padding(4.dp))
                 TextField(
@@ -130,7 +142,8 @@ fun CalculatorScreen(
                     label = {
                         Text(text = "in")
                     },
-                    modifier = Modifier.weight(1f)
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.weight(0.4f)
                 )
             }
             LabeledTextFieldRow("Weight") {
@@ -140,19 +153,22 @@ fun CalculatorScreen(
                     label = {
                         Text(text = "lbs")
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.weight(0.8f)
                 )
             }
         }
-        Spacer(Modifier.padding(12.dp))
+        Spacer(Modifier.height(24.dp))
         HorizontalDivider()
-        Spacer(Modifier.padding(4.dp))
-        Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
+        Box(
+            modifier = Modifier
+                .align(alignment = Alignment.CenterHorizontally)
+                .padding(12.dp)
+        ) {
             Button({ onEvent(CalculatorEvent.OnEnterClick) }) {
                 Text(text = "Enter")
             }
         }
-        Spacer(Modifier.padding(4.dp))
     }
 }
 
@@ -163,12 +179,12 @@ fun LabeledTextFieldRow(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier
-            .padding(10.dp)
             .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        Text(text = label, modifier = Modifier.width(54.dp))
-        Spacer(Modifier.padding(4.dp))
+        Text(text = label, modifier = Modifier.weight(0.2f))
         content()
     }
 }
