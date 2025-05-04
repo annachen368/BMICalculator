@@ -40,28 +40,45 @@ class CalculatorViewModel : ViewModel() {
             }
 
             is CalculatorEvent.OnCmValueChange -> {
-                uiState.update { it.copy(cmValue = event.value) }
+                uiState.update { it.copy(cmValue = filterDigit(event.value)) }
             }
 
             is CalculatorEvent.OnKgValueChange -> {
-                uiState.update { it.copy(kgValue = event.value) }
+                uiState.update { it.copy(kgValue = filterDigit(event.value)) }
             }
 
             is CalculatorEvent.OnFtValueChange -> {
-                uiState.update { it.copy(ftValue = event.value) }
+                uiState.update { it.copy(ftValue = filterDigit(event.value)) }
             }
 
             is CalculatorEvent.OnInValueChange -> {
-                uiState.update { it.copy(inValue = event.value) }
+                uiState.update { it.copy(inValue = filterDigit(event.value)) }
             }
 
             is CalculatorEvent.OnLbsValueChange -> {
-                uiState.update { it.copy(lbsValue = event.value) }
+                uiState.update { it.copy(lbsValue = filterDigit(event.value)) }
             }
 
             is CalculatorEvent.OnEnterClick -> {
 
             }
         }
+    }
+
+    fun filterDigit(input: String): String {
+//        return input.filter { it.isDigit() }
+        var result = ""
+        var dotUsed = false
+
+        for (char in input) {
+            if (char.isDigit()) {
+                result += char
+            } else if (char == '.' && !dotUsed) {
+                result += char
+                dotUsed = true
+            }
+            // ignore all other characters
+        }
+        return result.take(10)
     }
 }
