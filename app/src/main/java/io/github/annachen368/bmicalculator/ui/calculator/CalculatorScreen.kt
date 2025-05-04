@@ -25,6 +25,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,6 +33,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.annachen368.bmicalculator.ui.theme.BMICalculatorTheme
 
+/**
+ * @Stable - telling Compose: "This object won’t change in unexpected ways. Its public properties
+ * are either immutable or notify Compose when they change.”
+ * Because all fields are immutable vals and primitive types (String, Boolean, etc.), this class qualifies as @Stable.
+ * Will optimize diffing, improving runtime performance
+ */
+@Stable
 data class CalculatorUiState(
     val date: String,
     val isCmKgRadioButtonSelected: Boolean,
