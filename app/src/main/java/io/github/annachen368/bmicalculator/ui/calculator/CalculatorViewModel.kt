@@ -66,7 +66,10 @@ class CalculatorViewModel : ViewModel() {
     }
 
     fun filterDigit(input: String): String {
-//        return input.filter { it.isDigit() }
+        return input.filter { it.isDigit() }.take(10)
+    }
+
+    fun filterDecimal(input: String): String {
         var result = ""
         var dotUsed = false
 
