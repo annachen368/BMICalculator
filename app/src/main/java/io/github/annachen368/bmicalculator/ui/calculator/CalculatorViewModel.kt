@@ -28,4 +28,40 @@ class CalculatorViewModel : ViewModel() {
             it.copy(date = today.format(Date()))
         }
     }
+
+    fun onEvent(event: CalculatorEvent) {
+        when (event) {
+            is CalculatorEvent.OnCmKgRadioButtonSelected -> {
+                uiState.update { it.copy(isCmKgRadioButtonSelected = true) }
+            }
+
+            is CalculatorEvent.OnFtLbsRadioButtonSelected -> {
+                uiState.update { it.copy(isCmKgRadioButtonSelected = false) }
+            }
+
+            is CalculatorEvent.OnCmValueChange -> {
+                uiState.update { it.copy(cmValue = event.value) }
+            }
+
+            is CalculatorEvent.OnKgValueChange -> {
+                uiState.update { it.copy(kgValue = event.value) }
+            }
+
+            is CalculatorEvent.OnFtValueChange -> {
+                uiState.update { it.copy(ftValue = event.value) }
+            }
+
+            is CalculatorEvent.OnInValueChange -> {
+                uiState.update { it.copy(inValue = event.value) }
+            }
+
+            is CalculatorEvent.OnLbsValueChange -> {
+                uiState.update { it.copy(lbsValue = event.value) }
+            }
+
+            is CalculatorEvent.OnEnterClick -> {
+
+            }
+        }
+    }
 }
