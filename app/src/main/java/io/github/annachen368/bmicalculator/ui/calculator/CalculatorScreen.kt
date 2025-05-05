@@ -69,7 +69,6 @@ sealed class CalculatorEvent {
 
 @Composable
 fun CalculatorScreen(
-    innerPadding: PaddingValues,
     uiState: CalculatorUiState,
     onEvent: (CalculatorEvent) -> Unit
 ) {
@@ -79,7 +78,6 @@ fun CalculatorScreen(
         Column(
             Modifier
                 .padding(contentPadding)
-                .padding(innerPadding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
@@ -256,7 +254,6 @@ private fun EnterButton(onEvent: (CalculatorEvent) -> Unit) {
 private fun CalculatorScreenPreview() {
     BMICalculatorTheme {
         CalculatorScreen(
-            innerPadding = PaddingValues(0.dp),
             uiState = CalculatorUiState(
                 date = "May 1, 2025",
                 isCmKgRadioButtonSelected = false,

@@ -20,16 +20,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BMICalculatorTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val viewmodel: CalculatorViewModel = viewModel()
                     val uiState by viewmodel.uiState.collectAsState()
                     val onEvent = viewmodel::onEvent
                     CalculatorScreen(
-                        innerPadding,
                         uiState = uiState,
                         onEvent = onEvent
                     )
-                }
             }
         }
     }
