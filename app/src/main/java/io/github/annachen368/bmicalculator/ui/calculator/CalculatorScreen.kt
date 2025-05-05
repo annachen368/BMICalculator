@@ -1,7 +1,6 @@
 package io.github.annachen368.bmicalculator.ui.calculator
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -80,7 +79,7 @@ fun CalculatorScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 Text(
                     text = "Today is ${uiState.date}",
                     style = MaterialTheme.typography.titleMedium,
