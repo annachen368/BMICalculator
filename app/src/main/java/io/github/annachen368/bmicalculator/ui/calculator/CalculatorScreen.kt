@@ -3,7 +3,6 @@ package io.github.annachen368.bmicalculator.ui.calculator
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -234,16 +233,14 @@ fun LabeledTextFieldRow(
 @Composable
 private fun EnterButton(onEvent: (CalculatorEvent) -> Unit) {
     HorizontalDivider()
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .imePadding() // Pushes the button above the keyboard (tells Compose to add bottom padding equal to the height of the keyboard)
-            .padding(12.dp)
+            .padding(12.dp),
+        horizontalArrangement = Arrangement.Center
     ) {
-        Button(
-            onClick = { onEvent(CalculatorEvent.OnEnterClick) },
-            modifier = Modifier.align(Alignment.Center)
-        ) {
+        Button(onClick = { onEvent(CalculatorEvent.OnEnterClick) }) {
             Text(text = "Enter")
         }
     }
