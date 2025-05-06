@@ -40,23 +40,23 @@ class CalculatorViewModel : ViewModel() {
             }
 
             is CalculatorEvent.OnCmValueChange -> {
-                uiState.update { it.copy(cmValue = filterDigit(event.value)) }
+                uiState.update { it.copy(cmValue = filterDecimal(event.value)) }
             }
 
             is CalculatorEvent.OnKgValueChange -> {
-                uiState.update { it.copy(kgValue = filterDigit(event.value)) }
+                uiState.update { it.copy(kgValue = filterDecimal(event.value)) }
             }
 
             is CalculatorEvent.OnFtValueChange -> {
-                uiState.update { it.copy(ftValue = filterDigit(event.value)) }
+                uiState.update { it.copy(ftValue = filterDecimal(event.value)) }
             }
 
             is CalculatorEvent.OnInValueChange -> {
-                uiState.update { it.copy(inValue = filterDigit(event.value)) }
+                uiState.update { it.copy(inValue = filterDecimal(event.value)) }
             }
 
             is CalculatorEvent.OnLbsValueChange -> {
-                uiState.update { it.copy(lbsValue = filterDigit(event.value)) }
+                uiState.update { it.copy(lbsValue = filterDecimal(event.value)) }
             }
 
             is CalculatorEvent.OnEnterClick -> {
