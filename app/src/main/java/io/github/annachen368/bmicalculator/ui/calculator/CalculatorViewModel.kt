@@ -49,11 +49,11 @@ class CalculatorViewModel : ViewModel() {
             }
 
             is CalculatorEvent.OnFtValueChange -> {
-                uiState.update { it.copy(ftValue = filterDecimal(event.value)) }
+                uiState.update { it.copy(ftValue = filterDigit(event.value)) }
             }
 
             is CalculatorEvent.OnInValueChange -> {
-                uiState.update { it.copy(inValue = filterDecimal(event.value)) }
+                uiState.update { it.copy(inValue = filterDigit(event.value)) }
             }
 
             is CalculatorEvent.OnLbsValueChange -> {
