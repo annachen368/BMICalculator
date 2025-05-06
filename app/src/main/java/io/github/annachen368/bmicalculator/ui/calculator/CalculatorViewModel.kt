@@ -1,6 +1,7 @@
 package io.github.annachen368.bmicalculator.ui.calculator
 
 import androidx.lifecycle.ViewModel
+import io.github.annachen368.bmicalculator.ui.result.ResultUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import java.text.SimpleDateFormat
@@ -83,5 +84,34 @@ class CalculatorViewModel : ViewModel() {
             // ignore all other characters
         }
         return result.take(10)
+    }
+
+    fun calculateBmi(): Float {
+        return if (uiState.value.isCmKgRadioButtonSelected) {
+            val heightInMeters = uiState.value.cmValue.toFloatOrNull()?.div(100) ?: return 0.0f
+            val weightKg = uiState.value.kgValue.toFloatOrNull() ?: return 0.0f
+            weightKg / (heightInMeters * heightInMeters)
+        } else {
+            val feet = uiState.value.ftValue.toFloatOrNull() ?: return 0.0f
+            val inches = uiState.value.inValue.toFloatOrNull() ?: 0.0f
+            val totalInches = (feet * 12) + inches
+            val weightLbs = uiState.value.lbsValue.toFloatOrNull() ?: return 0.0f
+            (weightLbs / (totalInches * totalInches)) * 703
+        }
+    }
+
+
+    fun classifyBmi(bmi: Float): String = when {
+        bmi < 18.5 -> "Underweight"
+        bmi < 25 -> "Normal"
+        bmi < 30 -> "Overweight"
+        else -> "Obese"
+    }
+
+
+    fun toResultUiState(): ResultUiState {
+        val bmi = calculateBmi()
+        val rating = classifyBmi(bmi)
+        return ResultUiState(String.format("%.2f", bmi), rating)
     }
 }
